@@ -1,2 +1,2 @@
 gcc -o simplex simplex.cpp
-gcc -o twophase twophase.cpp
+# gcc -o twophase twophase.cpp

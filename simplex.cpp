@@ -14,13 +14,9 @@ public:
     int m, n;
     int min;
     double t[M + 1][N + 1] = {0};
-    double B[M];
-    double C[N];
-    int s[M];
 
     Tableau()
-    {
-    }
+    {}
 
     void read(char *filename)
     {
@@ -109,7 +105,7 @@ public:
                 return -2;
             }
 
-            pivot_rule(k, l)
+            pivot_rule(k, l);
 
                 for (int i = 1; i <= m + 1; ++i)
             {
@@ -127,7 +123,7 @@ public:
             t[k][l] = 1;
             t[k][0] = l; // update tag
             iteration++;
-            show_table(iteration);
+            show_table(iteration, l, k);
             l = select_pivot_row();
         }
     }
@@ -148,10 +144,14 @@ public:
         }
     }
 
-    void show_table(int iteration)
+    void show_table(int iteration, int l, int k)
     {
-        printf("ITERATION %d \n", iteration);
 
+        printf("ITERATION %d \n", iteration);
+        printf("PIVOT t(l=%d, k=%d)=%f \n", l, k, t[l][k]);
+        printf("Entering basis : x%d \n", l);
+        printf("Leaving basis : x%d \n", k);
+        printf("T = \n");
         for (int i = 1; i <= m + 1; ++i)
         {
             if (i <= m)
@@ -169,31 +169,6 @@ public:
     }
 };
 
-void solve()
-{
-    int l = select_pivot_column();
-    int iteration = 1;
-    while (1 <= l && l <= n)
-    {
-        if (is_unbounded(l))
-        {
-            printf("unbounded\n");
-            return;
-        }
-
-        int k = select_pivot_row(l);
-        printf("PIVOT t(l=%d, k=%d)=%f \n", l, k, t[l][k]);
-        pivot(l, k);
-
-        show_table(iteration);
-
-        l = select_pivot_column();
-        iteration++;
-    }
-
-    printf("z = %.1f\n", -t[m + 1][n + 1]);
-}
-
 int main(int argc, char **argv)
 {
     if (argc < 2)
@@ -202,7 +177,11 @@ int main(int argc, char **argv)
         return -1;
     }
     read(argv[1]);
-    solve();
+
+    Tableau tab;
+
+    tab.read(argv[1]);
+    tab.solve();
 
     return 0;
 }
