@@ -4,6 +4,12 @@ int n, m;
 double t[1000][1000];
 int s[1000];
 
+// m columns
+// n rows
+// de implementat verificarea cu Epsilon la diferente
+// te introdus etichetele `s` in tabloul `t` pe prima coloana pt simplificarea problemei
+
+
 void read(char *file_name)
 {
     FILE *file = fopen(file_name, "r");
@@ -21,6 +27,18 @@ void read(char *file_name)
     }
 }
 
+
+bool is_unbounded(int l)
+{
+    for (int h = 1; h <= m; ++h)
+    {
+        if (t[h][l] > 0)
+            return false;
+    }
+    return true; // is unbounded
+}
+
+
 int select_pivot_column()
 {
     for (int l = 1; l <= n; ++l)
@@ -31,16 +49,6 @@ int select_pivot_column()
     return 0;
 }
 
-bool is_unbounded(int l)
-{
-    for (int h = 1; h <= m; ++h)
-    {
-        if (t[h][l] > 0)
-            return false;
-    }
-
-    return true;
-}
 
 int select_pivot_row(int l)
 {
@@ -50,7 +58,7 @@ int select_pivot_row(int l)
 
     for (int h = 1; h <= m; ++h)
     {
-        if (t[h][l] > 0)
+        if (t[h][l] > 0) // selecting columns 
         {
             double val = (t[h][n + 1] / t[h][l]);
             if (val < minval || (val == minval && s[h] < mins))
@@ -77,6 +85,9 @@ void pivot(int l, int k)
                 continue;
 
             // pivoting rule
+            // i-th row, j-th column
+            // i, l - linia pivotului
+            // k, j - coloana pivotului
             t[i][j] = (t[i][j] * t[k][l] - t[i][l] * t[k][j]) / t[k][l];
         }
     }
