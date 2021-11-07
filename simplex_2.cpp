@@ -41,6 +41,8 @@ bool is_unbounded(int l)
 
 int select_pivot_column()
 {
+    // select the most negative reduced cost
+    // t[m+1] reduced cost
     for (int l = 1; l <= n; ++l)
     {
         if (t[m + 1][l] < 0)
