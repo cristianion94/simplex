@@ -83,14 +83,14 @@ public:
         return k;
     }
 
-    void solve()
+    int solve()
     {
         // is optimal t[m+1][k] >= 0, pt orice k
         int l, k, iteration;
         l = select_pivot_column();
         
         iteration = 0;
-        show_table(iteration);
+        show_table(iteration, 0, 0);
         while (1 <= l && l <= cols)
         {
             // `l` is the pivot column, entering basic variable on column l
