@@ -15,7 +15,7 @@ int n, m, s; // rows, columns
 double t[M][N];
 vector<double> B;
 
-void show(const vector<vector<double> > &A, const vector<double> &B, const vector<double> &C, const vector<double> &X, double z);
+void show(const vector<vector<double> > &A, const vector<double> &B, const vector<double> &C, double z);
 
 inline int column_vector(const vector<vector<double> > &A, const vector<double> &C, int col)
 {
@@ -168,6 +168,8 @@ bool simplex(vector<vector<double> > &A, vector<double> &B, vector<double> &C, v
 
     int iteration = 1;
 
+    show(A, B, C, z);
+
     while (1)
     {
         cout << "ITERATION : " << iteration << endl;
@@ -186,10 +188,10 @@ bool simplex(vector<vector<double> > &A, vector<double> &B, vector<double> &C, v
 
         for (int h = 0; h < m; h++)
         {
-            if (A[h][l] > EPS)
+            if (A[h][l] > EPS) // > 0
             {
                 double ratio = (B[h] / A[h][l]);
-                if ((fabs(ratio - minratio) < EPS && basic[h] < minindex) || ratio < ratio)
+                if ((fabs(ratio - minratio) < EPS && basic[h] < minindex) || ratio < minratio)
                 {
                     k = h;
                     minratio = ratio;
@@ -238,9 +240,7 @@ bool simplex(vector<vector<double> > &A, vector<double> &B, vector<double> &C, v
         iteration++;
     }
 
-    vector<double> X;
-
-    show(A, B, C, X, z);
+    show(A, B, C, z);
 
     return false;
 }
@@ -326,14 +326,14 @@ int twophase(const vector<vector<double> > &A, // constraint matrix
                     else
                         A1[r].push_back(0);
                 }
-                C1.push_back(1);
+                C1.push_back(-1);
                 basis[i] = n1; // var. artificiale le introducem in baza
                 n1++;
             }
         }
         C1.resize(n1, 1);
 
-        cout << " Entering PHASE I.";
+        cout << " Entering PHASE I. \n";
         bool unbounded = simplex(A1, B1, C1, basis, z);
         if (unbounded)
         {
@@ -355,7 +355,7 @@ int twophase(const vector<vector<double> > &A, // constraint matrix
         }
     }
 
-    cout << "\nEntering PHASE II.";
+    cout << "\nEntering PHASE II. \n";
     bool unbounded = simplex(A2, B2, C2, basis, z);
 
     if (unbounded)
@@ -370,7 +370,7 @@ int twophase(const vector<vector<double> > &A, // constraint matrix
     return 0;
 }
 
-void show(const vector<vector<double> > &A, const vector<double> &B, const vector<double> &C, const vector<double> &X, double z)
+void show(const vector<vector<double> > &A, const vector<double> &B, const vector<double> &C, double z)
 {
     int m = A.size();
     int n = A[0].size();
@@ -456,7 +456,7 @@ int main(int argc, char **argv)
 
     fin >> z; // citim si un z value obiectiv initial
 
-    show(A, B, C, X, z);
+    show(A, B, C, z);
 
     int ret = twophase(A, B, C, X, z);
 
