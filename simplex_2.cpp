@@ -1,13 +1,13 @@
 #include <cstdio>
+#include <math.h>
 
-int n, m;
+#define M 25
+#define N 50
+#define EPS 1E-9
+#define INF 9999
+
+int n, m; // rows, columns
 double t[1000][1000];
-int s[1000];
-
-// m columns
-// n rows
-// de implementat verificarea cu Epsilon la diferente
-// te introdus etichetele `s` in tabloul `t` pe prima coloana pt simplificarea problemei
 
 
 void read(char *file_name)
@@ -17,7 +17,7 @@ void read(char *file_name)
 
     for (int i = 1; i <= m + 1; ++i)
     {
-        s[i] = i + (n-m);
+        t[0][i] = i + (n-m); // punem variabilele slack ca basic
         for (int j = 1; j <= n + 1; ++j)
         {
             int x;
@@ -54,24 +54,27 @@ int select_pivot_column()
 
 int select_pivot_row(int l)
 {
-    double minval = 99999;
-    int k = 0;
-    int mins = 99999;
+    double min_ratio = INF;
+    int min_tag = INF;
+    int k = -1;
 
     for (int h = 1; h <= m; ++h)
     {
-        if (t[h][l] > 0) // selecting columns 
+        if (t[h][l] > 0)
         {
-            double val = (t[h][n + 1] / t[h][l]);
-            if (val < minval || (val == minval && s[h] < mins))
+            double ratio = (t[h][n + 1] / t[h][l]); // RHS / t[h][l]s
+
+            if ((fabs(ratio - min_ratio) < EPS && t[h][0] < min_tag) || ratio < min_ratio) // Bland's rule
             {
-                k = h;
-                minval = val;
-                mins = s[h];
+                k = h; // k is the selected row
+                min_ratio = ratio;
+                min_tag = t[h][0];
             }
         }
     }
-    s[k] = l;
+    
+    t[k][0] = l; // enter basis
+
     return k;
 }
 
@@ -118,7 +121,7 @@ void show_table(int iteration)
     for (int i = 1; i <= m + 1; ++i)
     {
         if(i <= m)
-            printf("x%d ", s[i]);
+            printf("x%d ", t[i][0]);
         else printf("z  ");
 
         for (int j = 1; j <= n + 1; ++j)
@@ -131,10 +134,11 @@ void show_table(int iteration)
     printf("----------------- \n");
 }
 
-void solve()
+void solve_simplex()
 {
-    int l = select_pivot_column();
+    show_table(0);
 
+    int l = select_pivot_column();
     int iteration = 1;
 
     while (1 <= l && l <= n)
@@ -166,11 +170,8 @@ int main(int argc, char **argv)
         return -1;
     }
 
-    read(argv[1]);
-
-    show_table(0);
-
-    solve();
+    read(argv[1]); // citim problema ca matrice
+    solve_simplex();
 
     return 0;
 }
