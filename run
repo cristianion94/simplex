@@ -1,10 +1,21 @@
 # gcc -o simplex simplex_2.cpp
+RED='\033[0;31m'
+NC='\033[0m' # No Color
+
 g++ -o twophase twophase.cpp
-echo "-------------------"
-echo "-------------------"
-echo "A) OUTPUT PROBLEMA"
+echo "${RED}-------------------${NC}"
+echo "${RED}-------------------${NC}"
+echo "${RED}A) OUTPUT ${NC}"
 ./twophase tema2/a.in
-echo "-------------------"
-echo "-------------------"
-echo "B) OUTPUT PROBLEMA"
+echo "${RED}-------------------${NC}"
+echo "${RED}-------------------${NC}"
+echo "${RED}B) OUTPUT ${NC}"
 ./twophase tema2/b.in
+echo "${RED}-------------------${NC}"
+echo "${RED}-------------------${NC}"
+echo "${RED}C) OUTPUT ${NC}"
+./twophase tema2/c.in
+echo "${RED}-------------------${NC}"
+echo "${RED}-------------------${NC}"
+echo "${RED}D) OUTPUT ${NC}"
+./twophase tema2/d.in

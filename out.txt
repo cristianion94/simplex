@@ -1,0 +1,195 @@
+[0;31m-------------------[0m
+[0;31m-------------------[0m
+[0;31mA) OUTPUT [0m
+2 constraints 
+2 variables 
+2	1	-1	0	= 7
+2	3	0	1	= 10
+-1	2	0	0	0
+(num_basic, m) = 1 2
+ Entering PHASE I. 
+ITERATION : 0
+2	1	-1	0	1	= 7
+2	3	0	1	0	= 10
+-2	-1	1	0	0	-7
+ITERATION : 1
+LEAVING VARIABLE 0
+ENTERING VARIABLE 0
+1	0.5	-0.5	0	0.5	= 3.5
+0	2	1	1	-1	= 3
+0	0	0	0	1	0
+ITERATION : 2
+1	0.5	-0.5	0	0.5	= 3.5
+0	2	1	1	-1	= 3
+0	0	0	0	1	0
+
+Entering PHASE II. 
+ITERATION : 0
+1	0.5	-0.5	0	= 3.5
+0	2	1	1	= 3
+0	2.5	-0.5	0	3.5
+ITERATION : 1
+LEAVING VARIABLE 1
+ENTERING VARIABLE 2
+1	1.5	0	0.5	= 5
+0	2	1	1	= 3
+0	3.5	0	0.5	5
+ITERATION : 2
+1	1.5	0	0.5	= 5
+0	2	1	1	= 3
+0	3.5	0	0.5	5
+two phase ret 0
+optimal z = 5
+x=( 5 0 )
+DONE!
+
+[0;31m-------------------[0m
+[0;31m-------------------[0m
+[0;31mB) OUTPUT [0m
+2 constraints 
+2 variables 
+1	1	2	0	= 5
+2	-1	0	1	= 3
+1	3	0	0	0
+(num_basic, m) = 1 2
+ Entering PHASE I. 
+ITERATION : 0
+1	1	2	0	1	= 5
+2	-1	0	1	0	= 3
+-1	-1	-2	0	0	-5
+ITERATION : 1
+LEAVING VARIABLE 1
+ENTERING VARIABLE 0
+0	1.5	2	-0.5	1	= 3.5
+1	-0.5	0	0.5	0	= 1.5
+0	-1.5	-2	0.5	0	-3.5
+ITERATION : 2
+LEAVING VARIABLE 0
+ENTERING VARIABLE 1
+0	1	1.3	-0.33	0.67	= 2.3
+1	0	0.67	0.33	0.33	= 2.7
+0	0	0	0	1	0
+ITERATION : 3
+0	1	1.3	-0.33	0.67	= 2.3
+1	0	0.67	0.33	0.33	= 2.7
+0	0	0	0	1	0
+
+Entering PHASE II. 
+ITERATION : 0
+0	1	1.3	-0.33	= 2.3
+1	0	0.67	0.33	= 2.7
+0	0	-4.7	0.67	-9.7
+ITERATION : 1
+LEAVING VARIABLE 0
+ENTERING VARIABLE 2
+0	0.75	1	-0.25	= 1.8
+1	-0.5	0	0.5	= 1.5
+0	3.5	0	-0.5	-1.5
+ITERATION : 2
+LEAVING VARIABLE 1
+ENTERING VARIABLE 3
+0.5	0.5	1	0	= 2.5
+2	-1	0	1	= 3
+1	3	0	0	2.7e-15
+ITERATION : 3
+0.5	0.5	1	0	= 2.5
+2	-1	0	1	= 3
+1	3	0	0	2.7e-15
+two phase ret 0
+optimal z = 2.7e-15
+x=( 0 0 )
+DONE!
+
+[0;31m-------------------[0m
+[0;31m-------------------[0m
+[0;31mC) OUTPUT [0m
+3 constraints 
+4 variables 
+2	1	1	-1	= 2
+2	-2	1	2	= 6
+-1	1	2	-1	= 8
+1	1	-3	-1	0
+(num_basic, m) = 0 3
+ Entering PHASE I. 
+ITERATION : 0
+2	1	1	-1	1	0	0	= 2
+2	-2	1	2	0	1	0	= 6
+-1	1	2	-1	0	0	1	= 8
+-3	0	-4	0	0	0	0	-16
+ITERATION : 1
+LEAVING VARIABLE 0
+ENTERING VARIABLE 0
+1	0.5	0.5	-0.5	0.5	0	0	= 1
+0	-3	0	3	-1	1	0	= 4
+0	1.5	2.5	-1.5	0.5	0	1	= 9
+0	1.5	-2.5	-1.5	1.5	0	0	-13
+ITERATION : 2
+LEAVING VARIABLE 0
+ENTERING VARIABLE 2
+2	1	1	-1	1	0	0	= 2
+0	-3	0	3	-1	1	0	= 4
+-5	-1	0	1	-2	0	1	= 4
+5	4	0	-4	4	0	0	-8
+ITERATION : 3
+LEAVING VARIABLE 1
+ENTERING VARIABLE 3
+2	0	1	0	0.67	0.33	0	= 3.3
+0	-1	0	1	-0.33	0.33	0	= 1.3
+-5	0	0	0	-1.7	-0.33	1	= 2.7
+5	0	0	0	2.7	1.3	0	-2.7
+ITERATION : 4
+2	0	1	0	0.67	0.33	0	= 3.3
+0	-1	0	1	-0.33	0.33	0	= 1.3
+-5	0	0	0	-1.7	-0.33	1	= 2.7
+5	0	0	0	2.7	1.3	0	-2.7
+not feasible
+two phase ret 1
+optimal z = -2.7
+x=( 0 0 0 0 )
+DONE!
+
+[0;31m-------------------[0m
+[0;31m-------------------[0m
+[0;31mD) OUTPUT [0m
+2 constraints 
+3 variables 
+1	1	1	= 6
+2	2	-1	= 3
+1	2	-1	0
+(num_basic, m) = 0 2
+ Entering PHASE I. 
+ITERATION : 0
+1	1	1	1	0	= 6
+2	2	-1	0	1	= 3
+-3	-3	0	0	0	-9
+ITERATION : 1
+LEAVING VARIABLE 1
+ENTERING VARIABLE 0
+0	0	1.5	1	-0.5	= 4.5
+1	1	-0.5	0	0.5	= 1.5
+0	0	-1.5	0	1.5	-4.5
+ITERATION : 2
+LEAVING VARIABLE 0
+ENTERING VARIABLE 2
+0	0	1	0.67	-0.33	= 3
+1	1	0	0.33	0.33	= 3
+0	0	0	1	1	0
+ITERATION : 3
+0	0	1	0.67	-0.33	= 3
+1	1	0	0.33	0.33	= 3
+0	0	0	1	1	0
+
+Entering PHASE II. 
+ITERATION : 0
+0	0	1	= 3
+1	1	0	= 3
+0	1	0	0
+ITERATION : 1
+0	0	1	= 3
+1	1	0	= 3
+0	1	0	0
+two phase ret 0
+optimal z = 0
+x=( 3 0 3 )
+DONE!
+
