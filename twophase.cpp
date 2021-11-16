@@ -120,6 +120,9 @@ bool simplex(vector<vector<double> > &A, vector<double> &B, vector<double> &C, v
 
         int leaving_variable = basic[k];
         basic[k] = l;
+        cout << "LEAVING VARIABLE " << k << endl;
+        cout << "ENTERING VARIABLE " << l << endl;
+
 
         for (int i = 0; i < m; i++)
         {
@@ -259,8 +262,8 @@ int twophase(const vector<vector<double> > &A, const vector<double> &B, const ve
             return -1;
         }
 
-        bool feasible = (fabs(z) < EPS) ? true : false;
-
+        bool feasible = (fabs(z) < EPS) ? true : false; 
+        // daca z este close to zero, atunci pb e fezabila
         if (!feasible) {
             cout << "not feasible" << endl;
             return 1;
@@ -300,7 +303,7 @@ void show(const vector<vector<double> > &A, const vector<double> &B, const vecto
     {
         for (int j = 0; j < n; j++)
         {
-            cout << A[i][j] << '\t';
+            cout << setprecision(2) << A[i][j] << '\t';
         }
         cout << "= " << B[i] << '\n';
     }
@@ -308,7 +311,7 @@ void show(const vector<vector<double> > &A, const vector<double> &B, const vecto
     {
         cout << C[i] << '\t';
     }
-    cout << z;
+    cout << setprecision(2) << z;
 
     cout << '\n';
 }
@@ -382,7 +385,7 @@ int main(int argc, char **argv)
     int ret = twophase(A, B, C, X, z);
 
     cout << "two phase ret " << ret << endl;
-    cout << "optimal z = " << z << endl;
+    cout << "optimal z = " << setprecision(2) << z << endl;
     cout << "x=( ";
     for (int i = 0; i < n; i++)
     {
