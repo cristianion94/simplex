@@ -71,6 +71,10 @@ void adjust_tableau(vector< vector< double > > &A, vector< double > &B, vector< 
 
 bool simplex(vector<vector<double> > &A, vector<double> &B, vector<double> &C, vector<int> &basic, double &z)
 {
+    // A tableau
+    // C obj coeficitients
+    // basic index
+    // z objective value
     int m = A.size();
     int n = C.size();
 
@@ -129,13 +133,13 @@ bool simplex(vector<vector<double> > &A, vector<double> &B, vector<double> &C, v
             }
             B[i] = (B[i] * A[k][l] - A[i][l] * B[k]) / A[k][l];
         }
-        // update reduced cost
         for (int j = 0; j < n; j++)
         {
-            // C[j] = (C[j] * A[k][l] - C[l] * C[k]) / A[k][l];
+            if (j == l)
+                continue;
             C[j] = (C[j] * A[k][l] - C[l] * A[k][j]) / A[k][l];
         }
-        z = (z * A[k][l] - C[l]);
+        z = (z * A[k][l] - C[l] * B[k]) / A[k][l];
 
         for (int i = 0; i < m; ++i)
         {
@@ -151,7 +155,7 @@ bool simplex(vector<vector<double> > &A, vector<double> &B, vector<double> &C, v
         }
         B[k] /= A[k][l];
         A[k][l] = 1;
-        C[l] = 0; // costul redus ramane zero
+        C[l] = 0;
 
         iteration++;
 
@@ -163,19 +167,13 @@ bool simplex(vector<vector<double> > &A, vector<double> &B, vector<double> &C, v
     return false;
 }
 
-int twophase(const vector<vector<double> > &A, // constraint matrix
-             const vector<double> &B,          // right hand side
-             const vector<double> &C,          // objective vector
-             vector<double> &X,                // unknowns
-             double &z                         // objective value
-)
+int twophase(const vector<vector<double> > &A, const vector<double> &B, const vector<double> &C, vector<double> &X, double &z)
 {
     int m = A.size();
     int n = A[0].size();
 
     if (!m || m != B.size() || n != C.size())
     {
-        cout << "Wrong inputs!\n";
         exit(1);
     }
 
@@ -388,9 +386,9 @@ int main(int argc, char **argv)
     cout << "x=( ";
     for (int i = 0; i < n; i++)
     {
-        cout << X[i] << '\t';
+        cout << X[i] << ' ';
     }
-    cout << " )" << endl;
+    cout << ")" << endl;
 
     cout << "DONE!" << endl
          << endl;
