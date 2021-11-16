@@ -1,4 +1,4 @@
 # gcc -o simplex simplex_2.cpp
 g++ -o twophase twophase.cpp
 ./twophase tema2/a.in
-./twophase tema2/b.in
+# ./twophase tema2/b.in

@@ -44,122 +44,30 @@ inline int column_vector(const vector<vector<double> > &A, const vector<double> 
     return -1;
 }
 
-// bool is_unbounded(int l)
-// {
-//     for (int h = 1; h <= m; ++h)
-//     {
-//         if (t[h][l] > 0)
-//             return false;
-//     }
-//     return true; // is unbounded
-// }
-
-// int select_pivot_column()
-// {
-//     // select the most negative reduced cost
-//     // t[m+1] reduced cost
-//     for (int l = 1; l <= n; ++l)
-//     {
-//         if (t[m + 1][l] < 0)
-//             return l;
-//     }
-//     return 0;
-// }
-
-// int select_pivot_row(int l)
-// {
-//     double min_ratio = INF;
-//     int min_tag = INF;
-//     int k = -1;
-
-//     for (int h = 1; h <= m; ++h)
-//     {
-//         if (t[h][l] > 0)
-//         {
-//             double ratio = (t[h][n + 1] / t[h][l]); // RHS / t[h][l]s
-
-//             if ((fabs(ratio - min_ratio) < EPS && t[h][0] < min_tag) || ratio < min_ratio) // Bland's rule
-//             {
-//                 k = h; // k is the selected row
-//                 min_ratio = ratio;
-//                 min_tag = t[h][0];
-//             }
-//         }
-//     }
-
-//     t[k][0] = l; // 'l' is entering;
-
-//     return k;
-// }
-
-// void pivot(int l, int k)
-// {
-//     for (int i = 1; i <= m + 1; ++i)
-//     {
-//         if (i == k)
-//             continue;
-//         for (int j = 1; j <= n + 1; ++j)
-//         {
-//             if (j == l)
-//                 continue;
-
-//             // pivoting rule
-//             // i-th row, j-th column
-//             // i, l - linia pivotului
-//             // k, j - coloana pivotului
-//             t[i][j] = (t[i][j] * t[k][l] - t[i][l] * t[k][j]) / t[k][l];
-//         }
-//     }
-
-//     for (int i = 1; i <= m + 1; ++i)
-//     {
-//         if (i == k)
-//             continue;
-//         t[i][l] = 0;
-//     }
-
-//     for (int j = 1; j <= n + 1; ++j)
-//     {
-//         if (j == l)
-//             continue;
-//         t[k][j] = t[k][j] / t[k][l];
-//     }
-
-//     t[k][l] = 1;
-// }
-
-// void show_table(int iteration)
-// {
-//     printf("ITERATION %d \n", iteration);
-
-//     cout << '_' << '\t';
-//     for (int j = 1; j <= n; ++j)
-//     {
-//         printf("%d\t", (int)t[0][j]);
-//     }
-//     cout << 'b';
-//     printf("\n");
-
-//     for (int i = 1; i <= m + 1; ++i)
-//     {
-//         if (i <= m)
-//         {
-//             printf("%d\t", (int)t[i][0]);
-//         }
-//         else
-//         {
-//             printf("z\t");
-//         }
-
-//         for (int j = 1; j <= n + 1; ++j)
-//         {
-//             cout << setprecision(2) << t[i][j] << '\t';
-//         }
-//         printf("\n");
-//     }
-
-//     printf("----------------- \n");
-// }
+void adjust_tableau(vector< vector< double > > &A, vector< double > &B, vector< double > &C, vector< int > &basic, double &z)
+{
+    int m = A.size();
+    int n = C.size();
+    
+    for (int r = 0; r < m; r++)
+    {
+        int basic_col = basic[r];
+        if (fabs(A[r][basic_col] - 1.0) > EPS)
+        {
+            double p = A[r][basic_col];
+            for (int c = 0; c < n; c++)
+                A[r][c] /= p;
+            B[r] /= p;
+        }
+        if (fabs(C[basic_col]) > EPS)
+        {
+            double p = C[basic_col];
+            for (int c = 0; c < n; c++)
+                C[c] -= A[r][c] * p;
+            z -= B[r] * p;
+        }
+    }
+}
 
 bool simplex(vector<vector<double> > &A, vector<double> &B, vector<double> &C, vector<int> &basic, double &z)
 {
@@ -168,6 +76,7 @@ bool simplex(vector<vector<double> > &A, vector<double> &B, vector<double> &C, v
 
     int iteration = 1;
 
+    cout << "ITERATION : " << 0 << endl;
     show(A, B, C, z);
 
     while (1)
@@ -200,8 +109,10 @@ bool simplex(vector<vector<double> > &A, vector<double> &B, vector<double> &C, v
             }
         }
 
-        if (k < 0)
+        if (k < 0) {
+            show(A, B, C, z);
             return true; // unbounded
+        }
 
         int leaving_variable = basic[k];
         basic[k] = l;
@@ -221,16 +132,21 @@ bool simplex(vector<vector<double> > &A, vector<double> &B, vector<double> &C, v
         // update reduced cost
         for (int j = 0; j < n; j++)
         {
-            C[j] = (C[j] * A[k][l] - C[l] * C[k]) / A[k][l];
+            // C[j] = (C[j] * A[k][l] - C[l] * C[k]) / A[k][l];
+            C[j] = (C[j] * A[k][l] - C[l] * A[k][j]) / A[k][l];
         }
         z = (z * A[k][l] - C[l]);
 
-        for (int i = 0; i < n; ++i)
+        for (int i = 0; i < m; ++i)
         {
+            if (i == k)
+                continue;
             A[i][l] = 0;
         }
         for (int j = 0; j < n; ++j)
         {
+            if (j == l)
+                continue;
             A[k][j] /= A[k][l];
         }
         B[k] /= A[k][l];
@@ -238,6 +154,8 @@ bool simplex(vector<vector<double> > &A, vector<double> &B, vector<double> &C, v
         C[l] = 0; // costul redus ramane zero
 
         iteration++;
+
+        show(A, B, C, z);
     }
 
     show(A, B, C, z);
@@ -265,7 +183,7 @@ int twophase(const vector<vector<double> > &A, // constraint matrix
         X.resize(n);
     fill(X.begin(), X.end(), 0); // reset solution
 
-    // A0, B0 - phase 1
+    // A0, B0 - initial tableau
     vector<vector<double> > A0(m, vector<double>(n));
     vector<double> B0(m);
     for (int r = 0; r < m; r++)
@@ -297,8 +215,8 @@ int twophase(const vector<vector<double> > &A, // constraint matrix
         copy(A0[r].begin(), A0[r].end(), A2[r].begin());
     copy(B0.begin(), B0.end(), B2.begin());
 
-    // for (int c=0; c<n; c++)
-    //     C2[c] = -C[c]; // coef. are negated? why?
+    for (int c = 0; c < n; c++)
+        C2[c] = C[c];
 
     z = 0;
 
@@ -318,7 +236,7 @@ int twophase(const vector<vector<double> > &A, // constraint matrix
         for (int i = 0; i < m; i++)
         {
             if (basis[i] < 0)
-            { // nu e in baza
+            {
                 for (int r = 0; r < m; r++)
                 {
                     if (r == i)
@@ -326,12 +244,14 @@ int twophase(const vector<vector<double> > &A, // constraint matrix
                     else
                         A1[r].push_back(0);
                 }
-                C1.push_back(-1);
+                C1.push_back(1);
                 basis[i] = n1; // var. artificiale le introducem in baza
                 n1++;
             }
         }
         C1.resize(n1, 1);
+
+        adjust_tableau(A1, B1, C1, basis, z);
 
         cout << " Entering PHASE I. \n";
         bool unbounded = simplex(A1, B1, C1, basis, z);
@@ -343,8 +263,10 @@ int twophase(const vector<vector<double> > &A, // constraint matrix
 
         bool feasible = (fabs(z) < EPS) ? true : false;
 
-        if (!feasible)
+        if (!feasible) {
+            cout << "not feasible" << endl;
             return 1;
+        }
 
         // copy for phase 2
         for (int r = 0; r < m; r++)
@@ -356,6 +278,7 @@ int twophase(const vector<vector<double> > &A, // constraint matrix
     }
 
     cout << "\nEntering PHASE II. \n";
+    adjust_tableau(A2, B2, C2, basis, z);
     bool unbounded = simplex(A2, B2, C2, basis, z);
 
     if (unbounded)
